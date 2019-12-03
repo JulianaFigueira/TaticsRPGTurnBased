@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 /*
 This claas represents the basic data for the caracthers 
 */
-public abstract class Unit
+public abstract class Unit : MonoBehaviour
 {
     public enum SpecialStatus
     {
-        Stun,
         OK,
+        Stun,
         GoAgain,
         None,
         Dead
@@ -37,11 +38,11 @@ public abstract class Unit
         }
     }
 
-    protected int Power;
-    protected int Range;
-    protected int Speed;
-    protected int Health;
-    protected SpecialStatus Status;
+    public int Power;
+    public int Range;
+    public int Speed;
+    public int Health;
+    public SpecialStatus Status;
 
     public Unit(int life, int speed, int power, int range)
     {
@@ -64,6 +65,11 @@ public abstract class Unit
     public int GetSpeed()
     {
         return Speed;
+    }
+
+    internal float GetSqrSpeed()
+    {
+        return Speed * Speed;
     }
 
     public int GetHealth()
