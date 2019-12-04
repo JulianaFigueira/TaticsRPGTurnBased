@@ -25,12 +25,21 @@ public class NonPlaybleCharacter : MonoBehaviour {
     private void Update()
     {
         if (character.CanMove && target != null)
+        {
             agent.SetDestination(target.position);
+        }
 
         if (agent.remainingDistance > agent.stoppingDistance)
             character.Move(true, false);
         else
+        {
             character.Move(false, false);
+            if (character.CanMove)
+            {
+                character.CanMove = false;
+                character.AIAttackBehaviour();
+            }
+        }
     }
 
     public void SetTarget(Transform target)

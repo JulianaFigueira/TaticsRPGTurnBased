@@ -1728,6 +1728,7 @@ MonoBehaviour:
   Speed: 2
   Health: 20
   AttackOrder: 0
+  unitType: 1
   Status: 0
   CanMove: 0
 --- !u!114 &114175972113695150

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /*
  Range is not too strong but attacks from a distance, may trigger a killer rush when finishing a target
@@ -34,5 +35,15 @@ public class RangeFighter : Unit
         }
 
         return new DefenseResult(Random.Range(0, Power) / 10);
+    }
+
+    public override void AIAttackBehaviour()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void AIMoveBehaviour(List<Unit> fighters)
+    {
+        throw new System.NotImplementedException();
     }
 }

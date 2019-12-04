@@ -125,6 +125,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58221a6eba9fccb4faea6675682ae1aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MapScript: {fileID: 114408275598924454}
+  UnitsScript: {fileID: 114743028426272630}
 --- !u!114 &114408275598924454
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -202,3 +204,4 @@ MonoBehaviour:
   - {fileID: 1996055327391904, guid: 86818a728c16d034d95739be7009b3de, type: 2}
   PositionOffset: {x: 0, y: 0.26, z: 0}
   TileMap: {fileID: 1695749674886686}
+  stateMachine: {fileID: 114197943907858342}

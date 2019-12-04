@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /*
  Melee is a brute who can stun 
@@ -31,4 +32,15 @@ public class MeleeFighter : Unit
 
         return new DefenseResult(Random.Range(0, Power) / 8);
     }
+
+    public override void AIAttackBehaviour()
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void AIMoveBehaviour(List<Unit> fighters)
+    {
+        throw new System.NotImplementedException();
+    }
+
 }

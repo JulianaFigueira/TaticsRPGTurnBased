@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UnitsManager : MonoBehaviour {
-
-    private List<GameObject> Units;
-    private List<Unit> UnitsFighters; //samme list as above, but easier to access Unit component
 
     public GameObject[] PCTypes; 
     public GameObject[] NPCTypes; 
@@ -14,12 +12,17 @@ public class UnitsManager : MonoBehaviour {
     public GameObject TileMap;
     private List<GameObject> TilePositions; //easy to access tiles
 
-    private TaticsManager stateMachine;
+    public TaticsManager stateMachine;
+    private List<GameObject> Units;
+    private List<Unit> UnitsFighters; //samme list as above, but easier to access Unit component
+
+    private int currentOrderIndex;
+    private Unit currentUnit;
 
     // Use this for initialization
     void Start()
     { 
-        stateMachine = GetComponentInParent<TaticsManager>();
+        //stateMachine = GetComponentInParent<TaticsManager>();
     }
 
     public void Generate()
@@ -31,7 +34,7 @@ public class UnitsManager : MonoBehaviour {
     private void CreateUnits()
     {
         int team = 4;
-        int enemies = Random.Range(4, 8);
+        int enemies = UnityEngine.Random.Range(4, 8);
 
         Units = new List<GameObject>(team + enemies);
 
@@ -48,41 +51,121 @@ public class UnitsManager : MonoBehaviour {
         Units.Add(Instantiate<GameObject>(PCTypes[0], TilePositions[0].transform.position + PositionOffset, Quaternion.identity, this.transform));
         Units.Add(Instantiate<GameObject>(PCTypes[1], TilePositions[1].transform.position + PositionOffset, Quaternion.identity, this.transform));
         Units.Add(Instantiate<GameObject>(PCTypes[2], TilePositions[2].transform.position + PositionOffset, Quaternion.identity, this.transform));
-        Units.Add(Instantiate<GameObject>(PCTypes[Random.Range(0, PCTypes.Length)], TilePositions[3].transform.position + PositionOffset, Quaternion.identity, this.transform));
+        Units.Add(Instantiate<GameObject>(PCTypes[UnityEngine.Random.Range(0, PCTypes.Length)], TilePositions[3].transform.position + PositionOffset, Quaternion.identity, this.transform));
 
         //random enemies on the other side of the map
         for (int i = TilePositions.Count - 1; i >= TilePositions.Count - enemies; i--)
         {
-            Units.Add(Instantiate<GameObject>(NPCTypes[Random.Range(0, NPCTypes.Length)], TilePositions[i].transform.position + PositionOffset, Quaternion.identity, this.transform));
+            Units.Add(Instantiate<GameObject>(NPCTypes[UnityEngine.Random.Range(0, NPCTypes.Length)], TilePositions[i].transform.position + PositionOffset, Quaternion.identity, this.transform));
         }
     }
 
     internal void StopGame()
     {
-        //throw new NotImplementedException();
+        Delete(); //no units, no game
     }
 
     internal void ChangeCurrentPlayer()
     {
-       // throw new NotImplementedException();
+        if (currentOrderIndex < Units.Count)
+            currentOrderIndex++;
+        else
+            currentOrderIndex = 0;
+        SetNextPlayer();
     }
 
     internal TaticsManager.GameState CheckGameState()
     {
-        // throw new NotImplementedException();
-        return TaticsManager.GameState.Lose;
+        int enemies = 0;
+        int allies = 0;
+        TaticsManager.GameState state = TaticsManager.GameState.Play;
+
+        CleanDefeatedUnits();    
+
+        foreach (Unit fighter in UnitsFighters)
+        {
+            if (fighter.unitType == Unit.UnitType.NonPlayableCharacter)
+                enemies++;
+            else if (fighter.unitType == Unit.UnitType.PlayableCharacter)
+                allies++;
+        }
+
+        if (enemies == 0)
+            state = TaticsManager.GameState.Win;
+        else if (allies == 0)
+            state = TaticsManager.GameState.Lose;
+
+        return state;
     }
 
-    internal bool CheckCurrentRound()
+    private void CleanDefeatedUnits()
     {
-        // throw new NotImplementedException();
-        return false;
+        for(int i = UnitsFighters.Count - 1; i >= 0; i--)
+        {
+            Unit fighter = UnitsFighters[i];
+            if (fighter.Health <= 0)
+            {
+                Units.Remove(fighter.gameObject);
+                UnitsFighters.Remove(fighter);
+                Destroy(fighter.gameObject);
+            }
+        }
+    }
+
+    internal bool CheckCurrentRoundFinished()
+    {
+        if (currentUnit.Status == Unit.SpecialStatus.GoAgain)
+        {
+            SetNextPlayer();
+            return false;
+        }
+        else
+            return true;
     }
 
     internal bool PrepareGame()
     {
-        // throw new NotImplementedException();
-        return false;
+        bool res = Units.Count > 0 && Units.Count == UnitsFighters.Count; //units generated, may play
+
+        if (res)
+        {
+            currentOrderIndex = 0;
+            SetNextPlayer();
+        }
+
+        return res;
+    }
+
+    private void SetNextPlayer()
+    {
+        foreach(Unit fighter in UnitsFighters)
+        {
+            if(fighter.AttackOrder == currentOrderIndex)
+            {
+                currentUnit = fighter;
+                if (fighter.Status == Unit.SpecialStatus.OK)
+                {
+                    fighter.CanMove = true;
+                    switch (fighter.unitType)
+                    {
+                        case Unit.UnitType.NonPlayableCharacter:
+                            //fighter.AIMoveBehaviour(UnitsFighters);
+
+                           //someone has to notify state machine when it finishes ????????????????????????????????????????????????
+                            break;
+                        case Unit.UnitType.PlayableCharacter:
+                            //liberate input
+                            break;
+                    }
+                }
+                else if (fighter.Status == Unit.SpecialStatus.Stun) //stun effect only lasts one round
+                {
+                    fighter.Status = Unit.SpecialStatus.OK;
+                }
+
+                break;
+            }
+        }
     }
 
     //Lottery
@@ -99,7 +182,7 @@ public class UnitsManager : MonoBehaviour {
         for (int i = 0; i < Units.Count; i++)
         {
             UnitsFighters.Add(Units[i].GetComponent<Unit>());
-            UnitsFighters[i].AttackOrder = numbers[Random.Range(0, numbers.Count)];
+            UnitsFighters[i].AttackOrder = numbers[UnityEngine.Random.Range(0, numbers.Count)];
             numbers.Remove(UnitsFighters[i].AttackOrder);
         }
     }
@@ -110,8 +193,10 @@ public class UnitsManager : MonoBehaviour {
         {
 #if UNITY_EDITOR
             DestroyImmediate(Units[i]);
+            DestroyImmediate(UnitsFighters[i]);
 #else
             Destroy(Units[i]);
+            Destroy(UnitsFighters[i]);
 #endif
 
         }

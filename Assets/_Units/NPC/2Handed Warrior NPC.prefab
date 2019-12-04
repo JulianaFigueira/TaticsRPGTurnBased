@@ -201,10 +201,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4841482530339816}
   - component: {fileID: 95906142337146866}
+  - component: {fileID: 114242377476229170}
   - component: {fileID: 195348756181725812}
   - component: {fileID: 136880555302013550}
   - component: {fileID: 54047505018219264}
-  - component: {fileID: 114242377476229170}
   - component: {fileID: 114640008382991002}
   m_Layer: 10
   m_Name: 2Handed Warrior NPC
@@ -1711,6 +1711,7 @@ MonoBehaviour:
   Speed: 1
   Health: 20
   AttackOrder: 0
+  unitType: 1
   Status: 0
   CanMove: 0
 --- !u!114 &114640008382991002

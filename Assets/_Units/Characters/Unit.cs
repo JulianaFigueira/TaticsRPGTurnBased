@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using System.Collections.Generic;
 
 /*
 This claas represents the basic data for the caracthers 
@@ -18,6 +19,12 @@ public abstract class Unit : MonoBehaviour
         GoAgain,
         None,
         Dead
+    }
+
+    public enum UnitType
+    {
+        PlayableCharacter,
+        NonPlayableCharacter
     }
 
     public struct AttackResult
@@ -47,6 +54,7 @@ public abstract class Unit : MonoBehaviour
     public int Speed;
     public int Health;
     public int AttackOrder;
+    public UnitType unitType;
     public SpecialStatus Status;
 
     private Rigidbody m_Rigidbody;
@@ -104,4 +112,6 @@ public abstract class Unit : MonoBehaviour
     protected abstract AttackResult PrepareAttack(Unit target);
     protected abstract DefenseResult ReceiveAttack(Unit attacker, AttackResult offense);
     protected abstract void CheckResult(Unit target, DefenseResult defense);
+    public abstract void AIMoveBehaviour(List<Unit> fighters);
+    public abstract void AIAttackBehaviour();
 }

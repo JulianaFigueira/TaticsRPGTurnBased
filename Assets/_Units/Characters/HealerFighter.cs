@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /*
  Healer is a pacifist, protected by the divine
@@ -37,5 +38,15 @@ public class HealerFighter : Unit
         }
 
         return new DefenseResult(0);
+    }
+
+    public override void AIMoveBehaviour(List<Unit> fighters)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public override void AIAttackBehaviour()
+    {
+        throw new System.NotImplementedException();
     }
 }

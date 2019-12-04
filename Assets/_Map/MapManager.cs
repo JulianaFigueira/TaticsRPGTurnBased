@@ -21,7 +21,7 @@ public class MapManager : MonoBehaviour {
 
     public void Awake()
     {
-        NavMesh = GetComponentInChildren<UnityEngine.AI.NavMeshSurface>();
+        //NavMesh = GetComponentInChildren<UnityEngine.AI.NavMeshSurface>();
     }
 
     public void Generate()

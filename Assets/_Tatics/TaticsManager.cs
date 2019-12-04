@@ -26,23 +26,27 @@ public class TaticsManager : MonoBehaviour {
 
     private GameState gameState;
     private TaticsStates currentState;
-    private int currentPlayer;
-    private MapManager MapScript;
-    private UnitsManager UnitsScript;
+    public MapManager MapScript;
+    public UnitsManager UnitsScript;
 
 	// Use this for initialization
 	void Start ()
     {
+        //MapScript = GetComponentInChildren<MapManager>();
+        //UnitsScript = GetComponentInChildren<UnitsManager>();
+
+        Restart();
+	}
+
+    private void Restart()
+    {
         InitGame();
         InitStateMachine();
-	}
+    }
 
     private void InitGame()
     {
-        MapScript = GetComponentInChildren<MapManager>();
         MapScript.Generate();
-
-        UnitsScript = GetComponentInChildren<UnitsManager>();
         UnitsScript.Generate();
     }
 
@@ -50,7 +54,6 @@ public class TaticsManager : MonoBehaviour {
     {
         gameState = GameState.Play;
         currentState = TaticsStates.Init;
-        currentPlayer = 0;
         UpdateStateMachine();
     }
 
@@ -65,13 +68,15 @@ public class TaticsManager : MonoBehaviour {
         {
             case TaticsStates.Init:
                 bool isGamePrepared = UnitsScript.PrepareGame();
-                currentState = isGamePrepared ? TaticsStates.ProcessingPlayer : TaticsStates.Init;
+                currentState = isGamePrepared ? TaticsStates.ProcessingPlayer : TaticsStates.Exit;
+                UpdateStateMachine(); 
                 break;
             case TaticsStates.ProcessingPlayer:
-                bool isFinishedRound = UnitsScript.CheckCurrentRound();
+                bool isFinishedRound = UnitsScript.CheckCurrentRoundFinished();
                 if (isFinishedRound)
                 {
                     currentState = TaticsStates.NextPlayer;
+                    UpdateStateMachine();
                 }
                 break;
             case TaticsStates.NextPlayer:
@@ -80,14 +85,17 @@ public class TaticsManager : MonoBehaviour {
                 {
                     case GameState.Play:
                         UnitsScript.ChangeCurrentPlayer();
+                        currentState = TaticsStates.ProcessingPlayer;
                         break;
                     case GameState.Win:
                         UnitsScript.StopGame();
                         currentState = TaticsStates.Win;
+                        UpdateStateMachine();
                         break;
                     case GameState.Lose:
                         UnitsScript.StopGame();
                         currentState = TaticsStates.Lose;
+                        UpdateStateMachine();
                         break;
                 }
                 break;
