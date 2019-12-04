@@ -21,16 +21,14 @@ public class TaticsManager : MonoBehaviour {
     {
         Play,
         Win,
-        Lose,
-        Pause
+        Lose
     }
 
     private GameState gameState;
     private TaticsStates currentState;
     private int currentPlayer;
-    public CreateMapScript MapScript;
-    public CreateUnitsScript UnitsScript;
-
+    private MapManager MapScript;
+    private UnitsManager UnitsScript;
 
 	// Use this for initialization
 	void Start ()
@@ -41,7 +39,10 @@ public class TaticsManager : MonoBehaviour {
 
     private void InitGame()
     {
+        MapScript = GetComponentInChildren<MapManager>();
         MapScript.Generate();
+
+        UnitsScript = GetComponentInChildren<UnitsManager>();
         UnitsScript.Generate();
     }
 
@@ -50,26 +51,31 @@ public class TaticsManager : MonoBehaviour {
         gameState = GameState.Play;
         currentState = TaticsStates.Init;
         currentPlayer = 0;
+        UpdateStateMachine();
     }
 
     // Update is called once per frame
     void Update () {
-		switch (currentState)
+		
+	}
+
+    public void UpdateStateMachine()
+    {
+        switch (currentState)
         {
             case TaticsStates.Init:
-                InitStateMachine();
-                currentState = TaticsStates.ProcessingPlayer;
+                bool isGamePrepared = UnitsScript.PrepareGame();
+                currentState = isGamePrepared ? TaticsStates.ProcessingPlayer : TaticsStates.Init;
                 break;
             case TaticsStates.ProcessingPlayer:
-                bool finishedRound = UnitsScript.CheckCurrentPlay();
-                if (finishedRound)
+                bool isFinishedRound = UnitsScript.CheckCurrentRound();
+                if (isFinishedRound)
                 {
                     currentState = TaticsStates.NextPlayer;
                 }
                 break;
             case TaticsStates.NextPlayer:
                 gameState = UnitsScript.CheckGameState();
-
                 switch (gameState)
                 {
                     case GameState.Play:
@@ -83,21 +89,25 @@ public class TaticsManager : MonoBehaviour {
                         UnitsScript.StopGame();
                         currentState = TaticsStates.Lose;
                         break;
-                    case GameState.Pause:
-                        //TODO
-                        break;
                 }
                 break;
             case TaticsStates.Lose:
-                currentState = TaticsStates.Exit;
+                //TODO: show message. restart?
+                DestroyTableTop();
                 break;
             case TaticsStates.Win:
-                currentState = TaticsStates.Exit;
+                //TODO: show message. restart?
+                DestroyTableTop();
                 break;
             case TaticsStates.Exit:
-                UnitsScript.Delete();
-                MapScript.Delete();
+                DestroyTableTop();
                 break;
         }
-	}
-0}
+    }
+
+    private void DestroyTableTop()
+    {
+        UnitsScript.Delete();
+        MapScript.Delete();
+    }
+}

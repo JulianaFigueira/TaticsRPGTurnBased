@@ -9,7 +9,7 @@ using UnityEngine.AI;
     NumberTilesZ: number of "rows"
 */
 [RequireComponent(typeof(NavMeshSurface))]
-public class CreateMapScript : MonoBehaviour {
+public class MapManager : MonoBehaviour {
 
     public GameObject[] TileTypes;
     public NavMeshSurface NavMesh;

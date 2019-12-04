@@ -1,14 +1,14 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(CreateUnitsScript))]
+[CustomEditor(typeof(UnitsManager))]
 public class CreateUnitsEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        CreateUnitsScript script = (CreateUnitsScript)target;
+        UnitsManager script = (UnitsManager)target;
         if (GUILayout.Button("Generate Units"))
         {
             script.Generate();
