@@ -670,7 +670,6 @@ GameObject:
   - component: {fileID: 195050214462073442}
   - component: {fileID: 136329364509403034}
   - component: {fileID: 54293361169692000}
-  - component: {fileID: 114366479837165394}
   - component: {fileID: 114367787781356012}
   m_Layer: 9
   m_Name: 2Handed Warrior
@@ -1082,7 +1081,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1803915460345352}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.39, y: 0.45, z: 2.04}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4512668807430186}
@@ -1707,22 +1706,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 255b57dbd1d998a4cb3faba027fe0a61, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Power: 0
-  Range: 0
-  Speed: 0
-  Health: 0
+  Power: 1
+  Range: 1
+  Speed: 1
+  Health: 10
+  AttackOrder: 0
   Status: 0
---- !u!114 &114366479837165394
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1803915460345352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ee887cd989e73408aa66b2d69fefd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  CanMove: 0
 --- !u!114 &114367787781356012
 MonoBehaviour:
   m_ObjectHideFlags: 1

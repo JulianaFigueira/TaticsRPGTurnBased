@@ -19,6 +19,11 @@ public class CreateMapScript : MonoBehaviour {
 
     public GameObject[,] TileMap;
 
+    public void Awake()
+    {
+        NavMesh = GetComponentInChildren<UnityEngine.AI.NavMeshSurface>();
+    }
+
     public void Generate()
     {
         CreateTiles();
@@ -29,7 +34,7 @@ public class CreateMapScript : MonoBehaviour {
     private void CreateTiles()
     {
         TileMap = new GameObject[NumberTilesX, NumberTilesZ];
-        float centerDistance = HexagonHeight * this.transform.localScale.x; //should be uniform
+        float centerDistance = HexagonHeight * this.transform.localScale.x; //xz should be uniform
 
         Vector3 centerPosition = this.transform.position;
         Vector3 nextDirection = new Vector3(0.0f, 0.0f, centerDistance);
@@ -67,7 +72,11 @@ public class CreateMapScript : MonoBehaviour {
         {
             for (int k = 0; k < NumberTilesZ; k++)
             {
-                DestroyImmediate(TileMap[i,k]);
+#if UNITY_EDITOR
+                DestroyImmediate(TileMap[i, k]);
+#else
+                 Destroy(TileMap[i, k]);
+#endif
             }
         }
     }

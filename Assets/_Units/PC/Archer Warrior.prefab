@@ -520,7 +520,6 @@ GameObject:
   - component: {fileID: 195492893093931872}
   - component: {fileID: 136206418044699926}
   - component: {fileID: 54460945357822364}
-  - component: {fileID: 114865938115981002}
   - component: {fileID: 114801185849922666}
   m_Layer: 9
   m_Name: Archer Warrior
@@ -1304,7 +1303,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1610714814496244}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.28, y: 0.97, z: -0.58}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4743516045307978}
@@ -1724,11 +1723,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e70cc0f92e25e14cb23d3db06c14c9e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Power: 0
-  Range: 0
-  Speed: 0
-  Health: 0
+  Power: 1
+  Range: 2
+  Speed: 2
+  Health: 10
+  AttackOrder: 0
   Status: 0
+  CanMove: 0
 --- !u!114 &114801185849922666
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1738,17 +1739,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0d2e986f70be6824bb8cfb2fcb018707, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114865938115981002
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1610714814496244}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ee887cd989e73408aa66b2d69fefd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!136 &136206418044699926

@@ -201,12 +201,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4841482530339816}
   - component: {fileID: 95906142337146866}
-  - component: {fileID: 114592942866555682}
   - component: {fileID: 195348756181725812}
   - component: {fileID: 136880555302013550}
   - component: {fileID: 54047505018219264}
-  - component: {fileID: 114089458915907364}
-  - component: {fileID: 114007607772057552}
+  - component: {fileID: 114242377476229170}
+  - component: {fileID: 114640008382991002}
   m_Layer: 10
   m_Name: 2Handed Warrior NPC
   m_TagString: AI
@@ -1462,7 +1461,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1197706171127098}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.42, y: 0.45, z: 2.04}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children:
   - {fileID: 4996251596141990}
@@ -1696,7 +1695,25 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!114 &114007607772057552
+--- !u!114 &114242377476229170
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1197706171127098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 255b57dbd1d998a4cb3faba027fe0a61, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Power: 8
+  Range: 1
+  Speed: 1
+  Health: 20
+  AttackOrder: 0
+  Status: 0
+  CanMove: 0
+--- !u!114 &114640008382991002
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -1708,33 +1725,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
---- !u!114 &114089458915907364
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1197706171127098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 68ee887cd989e73408aa66b2d69fefd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &114592942866555682
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1197706171127098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 255b57dbd1d998a4cb3faba027fe0a61, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Power: 5
-  Range: 1
-  Speed: 0
-  Health: 0
-  Status: 0
 --- !u!136 &136880555302013550
 CapsuleCollider:
   m_ObjectHideFlags: 1

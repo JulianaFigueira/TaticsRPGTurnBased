@@ -5,10 +5,6 @@
 */
 public class HealerFighter : Unit
 {
-    public HealerFighter(int life, int speed, int power, int range) : base(life, speed, power, range)
-    {
-    }
-
     protected override void CheckResult(Unit target, DefenseResult defense)
     {
         //nothing to do

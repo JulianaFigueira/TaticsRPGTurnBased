@@ -5,11 +5,6 @@
 */
 public class MeleeFighter : Unit
 {
-
-    public MeleeFighter(int life, int speed, int power, int range) : base(life, speed, power, range)
-    {
-    }
-
     protected override void CheckResult(Unit target, DefenseResult defense)
     {
         Health -= defense.Damage;

@@ -4,7 +4,11 @@ using System;
 
 /*
 This claas represents the basic data for the caracthers 
+And its animation control
 */
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(CapsuleCollider))]
+[RequireComponent(typeof(Animator))]
 public abstract class Unit : MonoBehaviour
 {
     public enum SpecialStatus
@@ -42,44 +46,54 @@ public abstract class Unit : MonoBehaviour
     public int Range;
     public int Speed;
     public int Health;
+    public int AttackOrder;
     public SpecialStatus Status;
 
-    public Unit(int life, int speed, int power, int range)
+    private Rigidbody m_Rigidbody;
+    private Animator m_Animator;
+    private CapsuleCollider m_Capsule;
+    private bool m_Attack;
+    private bool m_Moving;
+    public bool CanMove;
+
+    void Start()
     {
-        Power = power;
-        Range = range;
-        Health = life;
-        Speed = speed;
+        m_Animator = GetComponent<Animator>();
+        m_Rigidbody = GetComponent<Rigidbody>();
+        m_Capsule = GetComponent<CapsuleCollider>();
+
+        m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
     }
 
-    public int GetPower()
+
+    public void Move(bool moving, bool attacking)
     {
-        return Power;
+        // send input and other state parameters to the animator
+        m_Moving = moving;
+        m_Attack = attacking;
+        UpdateAnimator();
     }
 
-    public int GetRange()
-    {
-        return Range;
-    }
 
-    public int GetSpeed()
+    void UpdateAnimator()
     {
-        return Speed;
+        // update the animator parameters
+        if (m_Attack)
+        {
+            m_Animator.SetTrigger("Attack1Trigger");
+            m_Attack = false;
+        }
+        else
+        {
+            m_Animator.ResetTrigger("Attack1Trigger");
+        }
+
+        m_Animator.SetBool("Moving", m_Moving);
     }
 
     internal float GetSqrSpeed()
     {
         return Speed * Speed;
-    }
-
-    public int GetHealth()
-    {
-        return Health;
-    }
-
-    public SpecialStatus GetStatus()
-    {
-        return Status;
     }
 
     public void Randevouz(Unit target)
