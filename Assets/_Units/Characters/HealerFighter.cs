@@ -24,16 +24,19 @@ public class HealerFighter : Unit
         {
             if (Random.value >= 0.25f) // ~75% chance of divine intervention
             {
+                Debug.Log(name + " was saved by devine intervantion!");
                 Health = Power;
                 Status = SpecialStatus.OK;
             }
             else
             {
+                Debug.Log(name + " died . . .");
                 Status = SpecialStatus.Dead;
             }
         }
         else if (Status == SpecialStatus.OK && offense.Curse != SpecialStatus.None)
         {
+            Debug.Log(name + " is " + offense.Curse.ToString());
             Status = offense.Curse;
         }
 
@@ -48,7 +51,7 @@ public class HealerFighter : Unit
         // find waekest adversary
         for (int i = 0; i < fighters.Count; i++)
         {
-            if (fighters[i].tag == "Enemy") //healer works on their own kind
+            if (fighters[i].tag == "AI") //healer works on their own kind
             {
                 if (fighters[i].Health < minHealth)
                 {
@@ -68,6 +71,19 @@ public class HealerFighter : Unit
             target = weakest.transform.position;
         }
 
+        Ray ray = new Ray(target, Vector3.down);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            //check if valid position
+            if (hit.collider.gameObject.tag == "Ground")
+            {
+                target = hit.collider.gameObject.transform.position;
+            }
+        }
+
+        Debug.Log(name + " targeted " + weakest.name);
         CharacterAgent.SetTarget(target, weakest);
     }
 }

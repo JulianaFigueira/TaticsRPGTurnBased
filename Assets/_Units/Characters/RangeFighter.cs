@@ -2,16 +2,17 @@
 using UnityEngine;
 
 /*
- Range is not too strong but attacks from a distance, may trigger a killer rush when finishing a target
+ Range is not too strong but attacks from a distance, may trigger a adrenaline rush when finishing a target
 */
 public class RangeFighter : Unit
 {
     protected override void CheckResult(Unit target, DefenseResult defense)
     {
-        Health -= defense.Damage;
+        //Health -= defense.Damage;
 
         if (target.Health - Power <= 0)
         {
+            Debug.Log(name + " killed an enemy! Adrenaline rush!");
             Status = SpecialStatus.GoAgain;
         }
     }
@@ -27,10 +28,12 @@ public class RangeFighter : Unit
 
         if (Health <= 0)
         {
+            Debug.Log(name + " died . . .");
             Status = SpecialStatus.Dead;
         }
         else if (Status == SpecialStatus.OK && offense.Curse != SpecialStatus.None)
         {
+            Debug.Log(name + " is " + offense.Curse.ToString());
             Status = offense.Curse;
         }
 
@@ -46,7 +49,7 @@ public class RangeFighter : Unit
         // find closest adversary
         for (int i = 0; i < fighters.Count; i++)
         {
-            if (fighters[i].tag == "Ally") //NPC Enemy seeks Ally PC
+            if (fighters[i].tag == "Player") //NPC Enemy seeks PC
             {
                 dif = Vector3.Distance(fighters[i].transform.position, this.transform.position);
                 if (dif < minDistance)
@@ -67,6 +70,19 @@ public class RangeFighter : Unit
             target = closest.transform.position;
         }
 
+        Ray ray = new Ray(target, Vector3.down);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit))
+        {
+            //check if valid position
+            if (hit.collider.gameObject.tag == "Ground")
+            {
+                target = hit.collider.gameObject.transform.position;
+            }
+        }
+
+        Debug.Log(name + " targeted " + closest.name);
         CharacterAgent.SetTarget(target, closest);
     }
 }

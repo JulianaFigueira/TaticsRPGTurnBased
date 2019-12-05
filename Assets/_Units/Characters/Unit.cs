@@ -24,15 +24,17 @@ public abstract class Unit : MonoBehaviour
 
     public enum RoundStage
     {
+        ChoseMove,
         Move,
+        ChoseAttack,
         Attack,
         None
     }
 
     public enum UnitType
     {
-        PlayableCharacter,
-        NonPlayableCharacter
+        PC,
+        NPC
     }
 
     public struct AttackResult
@@ -72,18 +74,19 @@ public abstract class Unit : MonoBehaviour
     private bool m_Attack;
     private bool m_Moving;
 
-    protected ICharacterAgent CharacterAgent;
+    public ICharacterAgent CharacterAgent;
     protected Action OnRoundFinished;
 
     void Start()
     {
+        CharacterAgent = GetComponent<ICharacterAgent>();
+
         m_Animator = GetComponent<Animator>();
         m_Rigidbody = GetComponent<Rigidbody>();
         m_Capsule = GetComponent<CapsuleCollider>();
 
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 
-        CharacterAgent = GetComponent<ICharacterAgent>();
     }
 
 
@@ -104,11 +107,11 @@ public abstract class Unit : MonoBehaviour
             m_Animator.SetTrigger("Attack1Trigger");
             m_Attack = false;
         }
-        else
-        {
-            m_Animator.ResetTrigger("Attack1Trigger");
-        }
-
+        //else
+        //{
+        //    m_Animator.ResetTrigger("Attack1Trigger");
+        //}
+        
         m_Animator.SetBool("Moving", m_Moving);
     }
 
@@ -126,11 +129,20 @@ public abstract class Unit : MonoBehaviour
     public void AIRoundBehaviour(List<Unit> unitsFighters, Action onRoundFinished)
     {
         OnRoundFinished = onRoundFinished;
+        roundStage = RoundStage.Move;
         AIMoveBehaviour(unitsFighters);
+    }
+
+    public void RoundBehaviour(Action onRoundFinished)
+    {
+        OnRoundFinished = onRoundFinished;
+        roundStage = RoundStage.ChoseMove;
+        Debug.Log("Chose a point in the map for the unit to move");
     }
 
     public void FinishRound()
     {
+        Debug.Log(name + " finished round!");
         roundStage = RoundStage.None;
         OnRoundFinished();
     }

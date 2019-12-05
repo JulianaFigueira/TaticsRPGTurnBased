@@ -1665,11 +1665,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Power: 1
   Range: 2
-  Speed: 1
-  Health: 10
+  Speed: 3
+  Health: 3
   AttackOrder: 0
-  Status: 1
-  CanMove: 0
+  unitType: 0
+  Status: 0
+  roundStage: 4
 --- !u!114 &114468565756355116
 MonoBehaviour:
   m_ObjectHideFlags: 1

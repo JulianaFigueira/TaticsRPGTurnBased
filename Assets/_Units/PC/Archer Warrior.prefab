@@ -523,7 +523,7 @@ GameObject:
   - component: {fileID: 114801185849922666}
   m_Layer: 9
   m_Name: Archer Warrior
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1725,11 +1725,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Power: 1
   Range: 2
-  Speed: 2
-  Health: 10
+  Speed: 3
+  Health: 3
   AttackOrder: 0
+  unitType: 0
   Status: 0
-  CanMove: 0
+  roundStage: 4
 --- !u!114 &114801185849922666
 MonoBehaviour:
   m_ObjectHideFlags: 1

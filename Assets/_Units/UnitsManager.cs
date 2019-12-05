@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UnitsManager : MonoBehaviour {
 
@@ -19,9 +20,11 @@ public class UnitsManager : MonoBehaviour {
     private int currentOrderIndex;
     private Unit currentUnit;
 
+    public UnityEngine.UI.Button endTurnBtn;
+
     // Use this for initialization
     void Start()
-    { 
+    {
         //stateMachine = GetComponentInParent<TaticsManager>();
     }
 
@@ -60,6 +63,8 @@ public class UnitsManager : MonoBehaviour {
         }
     }
 
+    
+
     internal void StopGame()
     {
         Delete(); //no units, no game
@@ -67,11 +72,27 @@ public class UnitsManager : MonoBehaviour {
 
     internal void ChangeCurrentPlayer()
     {
+        if (Units.Count <= 1)
+            stateMachine.UpdateStateMachine();
+
         if (currentOrderIndex < Units.Count)
             currentOrderIndex++;
         else
             currentOrderIndex = 0;
-        SetNextPlayer();
+
+        bool isAlive = false;
+        foreach (Unit fighter in UnitsFighters)
+        {
+            if (fighter.AttackOrder == currentOrderIndex)
+            {
+                isAlive = true;
+            }
+        }
+
+        if (isAlive)
+            SetNextPlayer();
+        else
+            ChangeCurrentPlayer();
     }
 
     internal TaticsManager.GameState CheckGameState()
@@ -84,9 +105,9 @@ public class UnitsManager : MonoBehaviour {
 
         foreach (Unit fighter in UnitsFighters)
         {
-            if (fighter.unitType == Unit.UnitType.NonPlayableCharacter)
+            if (fighter.unitType == Unit.UnitType.NPC)
                 enemies++;
-            else if (fighter.unitType == Unit.UnitType.PlayableCharacter)
+            else if (fighter.unitType == Unit.UnitType.PC)
                 allies++;
         }
 
@@ -116,11 +137,14 @@ public class UnitsManager : MonoBehaviour {
     {
         if (currentUnit.Status == Unit.SpecialStatus.GoAgain)
         {
+            currentUnit.Status = Unit.SpecialStatus.OK;
             SetNextPlayer();
             return false;
         }
-        else
+        else if (currentUnit.roundStage == Unit.RoundStage.None)
             return true;
+
+        return false;
     }
 
     internal bool PrepareGame()
@@ -142,26 +166,44 @@ public class UnitsManager : MonoBehaviour {
         {
             if(fighter.AttackOrder == currentOrderIndex)
             {
+                Debug.Log("It's " + fighter.name + " turn.");
                 currentUnit = fighter;
                 if (fighter.Status == Unit.SpecialStatus.OK)
                 {
-                    fighter.roundStage = Unit.RoundStage.Move;
                     switch (fighter.unitType)
                     {
-                        case Unit.UnitType.NonPlayableCharacter:
+                        case Unit.UnitType.NPC:
+                            endTurnBtn.gameObject.SetActive(false);
                             //it has to notify state machine when it finishes
                             fighter.AIRoundBehaviour(UnitsFighters, stateMachine.UpdateStateMachine);
                             break;
-                        case Unit.UnitType.PlayableCharacter:
-                            //liberate input
+                        case Unit.UnitType.PC:
+                            endTurnBtn.gameObject.SetActive(true);
+                            fighter.RoundBehaviour(stateMachine.UpdateStateMachine);
                             break;
                     }
                 }
                 else if (fighter.Status == Unit.SpecialStatus.Stun) //stun effect only lasts one round
                 {
+                    Debug.Log(fighter.name + "stun effect is over.");
                     fighter.Status = Unit.SpecialStatus.OK;
+                    stateMachine.UpdateStateMachine();
                 }
 
+                break;
+            }
+        }
+    }
+
+    public void EndTurn()
+    {
+        foreach (Unit fighter in UnitsFighters)
+        {
+            if (fighter.AttackOrder == currentOrderIndex)
+            {
+                Debug.Log("End " + fighter.name + " turn.");
+                currentUnit = fighter;
+                fighter.FinishRound();
                 break;
             }
         }
@@ -183,6 +225,8 @@ public class UnitsManager : MonoBehaviour {
             UnitsFighters.Add(Units[i].GetComponent<Unit>());
             UnitsFighters[i].AttackOrder = numbers[UnityEngine.Random.Range(0, numbers.Count)];
             numbers.Remove(UnitsFighters[i].AttackOrder);
+            UnitsFighters[i].name = UnitsFighters[i].unitType.ToString() + " " + UnitsFighters[i].GetType().ToString() + " " + UnitsFighters[i].AttackOrder;
+            Debug.Log(UnitsFighters[i].name + " order in battle is " + UnitsFighters[i].AttackOrder);
         }
     }
 

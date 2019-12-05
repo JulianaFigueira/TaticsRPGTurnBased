@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityStandardAssets.CrossPlatformInput;
 
 [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 [RequireComponent(typeof(Unit))]
@@ -19,7 +18,12 @@ public class PlayableCharacter : MonoBehaviour, ICharacterAgent
 
     private void Update()
     {
-        CheckPlayerInput();
+        Unit character = characterAgent.Character;
+
+        if (character.roundStage == Unit.RoundStage.ChoseMove || character.roundStage == Unit.RoundStage.ChoseAttack)
+        {
+            CheckPlayerInput();
+        }
 
         CheckRoundState();
     }
@@ -28,7 +32,7 @@ public class PlayableCharacter : MonoBehaviour, ICharacterAgent
     {
         Unit character = characterAgent.Character;
 
-        if (character.roundStage == Unit.RoundStage.Move && Input.GetMouseButtonDown(0))
+        if (character.roundStage == Unit.RoundStage.ChoseMove && Input.GetMouseButtonDown(0))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -36,25 +40,26 @@ public class PlayableCharacter : MonoBehaviour, ICharacterAgent
             if (Physics.Raycast(ray, out hit))
             {
                 //check if valid position
-                float distance = Vector3.Distance(hit.collider.transform.position, character.transform.position);
+                float distance = Vector3.Distance(hit.point, character.transform.position);
                 if (distance <= character.Speed && hit.collider.gameObject.tag == "Ground")
                 {
                     SetTarget(hit.point, null);
                 }
             }
         }
-        else if (character.roundStage == Unit.RoundStage.Attack && Input.GetMouseButtonDown(0))
+        else if (character.roundStage == Unit.RoundStage.ChoseAttack && Input.GetMouseButtonDown(0))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit))
             {
-                float distance = Vector3.Distance(hit.collider.transform.position, character.transform.position);
-                if (distance <= character.Range && (hit.collider.gameObject.tag == "Enemy" || hit.collider.gameObject.tag == "Ally"))
+                float distance = Vector3.Distance(hit.point, character.transform.position);
+                if (distance <= character.Range && (hit.collider.gameObject.tag == "AI" || hit.collider.gameObject.tag == "Player"))
                 {
                     Unit target = hit.collider.gameObject.GetComponent<Unit>();
                     SetTarget(hit.point, target);
+                    Attack();
                 }
             }
         }
