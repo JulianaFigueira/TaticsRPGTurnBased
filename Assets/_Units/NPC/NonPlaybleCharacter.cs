@@ -4,52 +4,32 @@ using UnityEngine;
 
 [RequireComponent(typeof(UnityEngine.AI.NavMeshAgent))]
 [RequireComponent(typeof(Unit))]
-public class NonPlaybleCharacter : MonoBehaviour {
-
-    
-    public UnityEngine.AI.NavMeshAgent agent { get; private set; }             // the navmesh agent required for the path finding
-    public Unit character { get; private set; } // the movements we are controlling
-    public Transform target;                                    // target to aim for
-
+public class NonPlaybleCharacter : MonoBehaviour, ICharacterAgent
+{
+    CharacterAgent characterAgent;
 
     private void Start()
     {
-        // get the components on the object we need ( should not be null due to require component so no need to check )
-        agent = GetComponentInChildren<UnityEngine.AI.NavMeshAgent>();
-        character = GetComponent<Unit>();
-
-        agent.updateRotation = false;
-        agent.updatePosition = true;
+        characterAgent = new CharacterAgent(GetComponentInChildren<UnityEngine.AI.NavMeshAgent>(), GetComponent<Unit>());
     }
 
     private void Update()
     {
-        if (character.CanMove && target != null)
-        {
-            agent.SetDestination(target.position);
-        }
-
-        if (agent.remainingDistance > agent.stoppingDistance)
-            character.Move(true, false);
-        else
-        {
-            character.Move(false, false);
-            if (character.CanMove)
-            {
-                character.CanMove = false;
-                character.AIAttackBehaviour();
-            }
-        }
+        CheckRoundState();
     }
 
-    public void SetTarget(Transform target)
+    public void CheckRoundState()
     {
-        this.target = target;
+        characterAgent.CheckRoundState();
+    }
+
+    public void SetTarget(Vector3 newPosition, Unit target)
+    {
+        characterAgent.SetTarget(newPosition, target);
     }
 
     public void Attack()
     {
-        character.Move(false, true);
+        characterAgent.Attack();
     }
-
 }

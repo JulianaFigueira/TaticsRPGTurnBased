@@ -9,7 +9,7 @@ public class UnitsManager : MonoBehaviour {
 
     public Vector3 PositionOffset;
 
-    public GameObject TileMap;
+    public MapManager TileMap;
     private List<GameObject> TilePositions; //easy to access tiles
 
     public TaticsManager stateMachine;
@@ -103,7 +103,7 @@ public class UnitsManager : MonoBehaviour {
         for(int i = UnitsFighters.Count - 1; i >= 0; i--)
         {
             Unit fighter = UnitsFighters[i];
-            if (fighter.Health <= 0)
+            if (fighter.Health <= 0 || fighter.Status == Unit.SpecialStatus.Dead)
             {
                 Units.Remove(fighter.gameObject);
                 UnitsFighters.Remove(fighter);
@@ -145,13 +145,12 @@ public class UnitsManager : MonoBehaviour {
                 currentUnit = fighter;
                 if (fighter.Status == Unit.SpecialStatus.OK)
                 {
-                    fighter.CanMove = true;
+                    fighter.roundStage = Unit.RoundStage.Move;
                     switch (fighter.unitType)
                     {
                         case Unit.UnitType.NonPlayableCharacter:
-                            //fighter.AIMoveBehaviour(UnitsFighters);
-
-                           //someone has to notify state machine when it finishes ????????????????????????????????????????????????
+                            //it has to notify state machine when it finishes
+                            fighter.AIRoundBehaviour(UnitsFighters, stateMachine.UpdateStateMachine);
                             break;
                         case Unit.UnitType.PlayableCharacter:
                             //liberate input

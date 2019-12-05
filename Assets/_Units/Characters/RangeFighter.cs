@@ -36,14 +36,37 @@ public class RangeFighter : Unit
 
         return new DefenseResult(Random.Range(0, Power) / 10);
     }
-
-    public override void AIAttackBehaviour()
+    
+    protected override void AIMoveBehaviour(List<Unit> fighters)
     {
-        throw new System.NotImplementedException();
-    }
+        Unit closest = this;
+        float minDistance = float.MaxValue;
+        float dif;
 
-    public override void AIMoveBehaviour(List<Unit> fighters)
-    {
-        throw new System.NotImplementedException();
+        // find closest adversary
+        for (int i = 0; i < fighters.Count; i++)
+        {
+            if (fighters[i].tag == "Ally") //NPC Enemy seeks Ally PC
+            {
+                dif = Vector3.Distance(fighters[i].transform.position, this.transform.position);
+                if (dif < minDistance)
+                {
+                    minDistance = dif;
+                    closest = fighters[i];
+                }
+            }
+        }
+
+        Vector3 target;
+        if (minDistance > (Speed + Range))
+        {
+            target = closest.transform.position * (Speed/ closest.transform.position.magnitude);
+        }
+        else
+        {
+            target = closest.transform.position;
+        }
+
+        CharacterAgent.SetTarget(target, closest);
     }
 }

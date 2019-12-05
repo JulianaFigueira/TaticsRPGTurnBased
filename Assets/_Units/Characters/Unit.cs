@@ -10,6 +10,7 @@ And its animation control
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CapsuleCollider))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(ICharacterAgent))]
 public abstract class Unit : MonoBehaviour
 {
     public enum SpecialStatus
@@ -19,6 +20,13 @@ public abstract class Unit : MonoBehaviour
         GoAgain,
         None,
         Dead
+    }
+
+    public enum RoundStage
+    {
+        Move,
+        Attack,
+        None
     }
 
     public enum UnitType
@@ -56,13 +64,16 @@ public abstract class Unit : MonoBehaviour
     public int AttackOrder;
     public UnitType unitType;
     public SpecialStatus Status;
+    public RoundStage roundStage;
 
     private Rigidbody m_Rigidbody;
     private Animator m_Animator;
     private CapsuleCollider m_Capsule;
     private bool m_Attack;
     private bool m_Moving;
-    public bool CanMove;
+
+    protected ICharacterAgent CharacterAgent;
+    protected Action OnRoundFinished;
 
     void Start()
     {
@@ -71,6 +82,8 @@ public abstract class Unit : MonoBehaviour
         m_Capsule = GetComponent<CapsuleCollider>();
 
         m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+
+        CharacterAgent = GetComponent<ICharacterAgent>();
     }
 
 
@@ -99,7 +112,7 @@ public abstract class Unit : MonoBehaviour
         m_Animator.SetBool("Moving", m_Moving);
     }
 
-    internal float GetSqrSpeed()
+    public float GetSqrSpeed()
     {
         return Speed * Speed;
     }
@@ -107,11 +120,24 @@ public abstract class Unit : MonoBehaviour
     public void Randevouz(Unit target)
     {
         CheckResult(target, target.ReceiveAttack(this, this.PrepareAttack(target)));
+        FinishRound();
+    }
+
+    public void AIRoundBehaviour(List<Unit> unitsFighters, Action onRoundFinished)
+    {
+        OnRoundFinished = onRoundFinished;
+        AIMoveBehaviour(unitsFighters);
+    }
+
+    public void FinishRound()
+    {
+        roundStage = RoundStage.None;
+        OnRoundFinished();
     }
 
     protected abstract AttackResult PrepareAttack(Unit target);
     protected abstract DefenseResult ReceiveAttack(Unit attacker, AttackResult offense);
     protected abstract void CheckResult(Unit target, DefenseResult defense);
-    public abstract void AIMoveBehaviour(List<Unit> fighters);
-    public abstract void AIAttackBehaviour();
+    protected abstract void AIMoveBehaviour(List<Unit> fighters);
+    
 }

@@ -40,13 +40,34 @@ public class HealerFighter : Unit
         return new DefenseResult(0);
     }
 
-    public override void AIMoveBehaviour(List<Unit> fighters)
+    protected override void AIMoveBehaviour(List<Unit> fighters)
     {
-        throw new System.NotImplementedException();
-    }
+        Unit weakest = this;
+        int minHealth = int.MaxValue;
 
-    public override void AIAttackBehaviour()
-    {
-        throw new System.NotImplementedException();
+        // find waekest adversary
+        for (int i = 0; i < fighters.Count; i++)
+        {
+            if (fighters[i].tag == "Enemy") //healer works on their own kind
+            {
+                if (fighters[i].Health < minHealth)
+                {
+                    minHealth = fighters[i].Health;
+                    weakest = fighters[i];
+                }
+            }
+        }
+
+        Vector3 target;
+        if (Vector3.Distance(transform.position, weakest.transform.position) > (Speed + Range))
+        {
+            target = weakest.transform.position * (Speed / weakest.transform.position.magnitude);
+        }
+        else
+        {
+            target = weakest.transform.position;
+        }
+
+        CharacterAgent.SetTarget(target, weakest);
     }
 }

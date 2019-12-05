@@ -72,8 +72,7 @@ public class TaticsManager : MonoBehaviour {
                 UpdateStateMachine(); 
                 break;
             case TaticsStates.ProcessingPlayer:
-                bool isFinishedRound = UnitsScript.CheckCurrentRoundFinished();
-                if (isFinishedRound)
+                if (UnitsScript.CheckCurrentRoundFinished())
                 {
                     currentState = TaticsStates.NextPlayer;
                     UpdateStateMachine();

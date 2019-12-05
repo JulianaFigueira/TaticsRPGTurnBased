@@ -32,15 +32,36 @@ public class MeleeFighter : Unit
 
         return new DefenseResult(Random.Range(0, Power) / 8);
     }
-
-    public override void AIAttackBehaviour()
+    
+    protected override void AIMoveBehaviour(List<Unit> fighters)
     {
-        throw new System.NotImplementedException();
-    }
+        Unit weakest = this;
+        int minHealth = int.MaxValue;
 
-    public override void AIMoveBehaviour(List<Unit> fighters)
-    {
-        throw new System.NotImplementedException();
+        // find waekest adversary
+        for (int i = 0; i < fighters.Count; i++)
+        {
+            if (fighters[i].tag == "Ally")
+            {
+                if (fighters[i].Health < minHealth)
+                {
+                    minHealth = fighters[i].Health;
+                    weakest = fighters[i];
+                }
+            }
+        }
+
+        Vector3 target;
+        if (Vector3.Distance(transform.position, weakest.transform.position) > (Speed + Range))
+        {
+            target = weakest.transform.position * (Speed / weakest.transform.position.magnitude);
+        }
+        else
+        {
+            target = weakest.transform.position;
+        }
+
+        CharacterAgent.SetTarget(target, weakest);
     }
 
 }
