@@ -13,7 +13,7 @@ public class PlayableCharacter : MonoBehaviour, ICharacterAgent
     private void Start()
     {
         cam = Camera.main;
-        characterAgent = new CharacterAgent(GetComponentInChildren<UnityEngine.AI.NavMeshAgent>(), GetComponent<Unit>());
+        characterAgent = new CharacterAgent(GetComponent<UnityEngine.AI.NavMeshAgent>(), GetComponent<Unit>());
     }
 
     private void Update()
@@ -31,35 +31,30 @@ public class PlayableCharacter : MonoBehaviour, ICharacterAgent
     private void CheckPlayerInput()
     {
         Unit character = characterAgent.Character;
-
-        if (character.roundStage == Unit.RoundStage.ChoseMove && Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = cam.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-
-            if (Physics.Raycast(ray, out hit))
-            {
-                //check if valid position
-                float distance = Vector3.Distance(hit.point, character.transform.position);
-                if (distance <= character.Speed && hit.collider.gameObject.tag == "Ground")
-                {
-                    SetTarget(hit.point, null);
-                }
-            }
-        }
-        else if (character.roundStage == Unit.RoundStage.ChoseAttack && Input.GetMouseButtonDown(0))
-        {
-            Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-
+            Debug.DrawRay(ray.origin, ray.direction, Color.cyan, 10.0f, true);
             if (Physics.Raycast(ray, out hit))
             {
                 float distance = Vector3.Distance(hit.point, character.transform.position);
-                if (distance <= character.Range && (hit.collider.gameObject.tag == "AI" || hit.collider.gameObject.tag == "Player"))
+                switch (character.roundStage)
                 {
-                    Unit target = hit.collider.gameObject.GetComponent<Unit>();
-                    SetTarget(hit.point, target);
-                    Attack();
+                    case Unit.RoundStage.ChoseMove:
+                        if (distance <= character.Speed && hit.collider.gameObject.tag == "Ground")
+                        {
+                            SetTarget(hit.point, null);
+                        }
+                    break;
+                    case Unit.RoundStage.ChoseAttack:
+                        if (distance <= character.Range && (hit.collider.gameObject.tag == "AI" || hit.collider.gameObject.tag == "Player"))
+                        {
+                            Unit target = hit.collider.gameObject.GetComponent<Unit>();
+                            SetTarget(hit.point, target);
+                            Attack();
+                        }
+                    break;
                 }
             }
         }

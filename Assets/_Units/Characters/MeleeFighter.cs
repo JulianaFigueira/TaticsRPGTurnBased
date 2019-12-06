@@ -37,30 +37,30 @@ public class MeleeFighter : Unit
     
     protected override void AIMoveBehaviour(List<Unit> fighters)
     {
-        Unit weakest = this;
-        int minHealth = int.MaxValue;
+        Unit healthiest = this;
+        int maxHealth = int.MinValue;
 
         // find waekest adversary
         for (int i = 0; i < fighters.Count; i++)
         {
             if (fighters[i].tag == "Player")
             {
-                if (fighters[i].Health < minHealth)
+                if (fighters[i].Health > maxHealth)
                 {
-                    minHealth = fighters[i].Health;
-                    weakest = fighters[i];
+                    maxHealth = fighters[i].Health;
+                    healthiest = fighters[i];
                 }
             }
         }
 
         Vector3 target;
-        if (Vector3.Distance(transform.position, weakest.transform.position) > (Speed + Range))
+        if (Vector3.Distance(transform.position, healthiest.transform.position) > (Speed + Range))
         {
-            target = weakest.transform.position * (Speed / weakest.transform.position.magnitude);
+            target = healthiest.transform.position * (Speed / healthiest.transform.position.magnitude);
         }
         else
         {
-            target = weakest.transform.position;
+            target = healthiest.transform.position;
         }
 
         Ray ray = new Ray(target, Vector3.down);
@@ -75,8 +75,8 @@ public class MeleeFighter : Unit
             }
         }
 
-        Debug.Log(name + " targeted " + weakest.name);
-        CharacterAgent.SetTarget(target, weakest);
+        Debug.Log(name + " targeted " + healthiest.name);
+        CharacterAgent.SetTarget(target, healthiest);
     }
 
 }

@@ -166,7 +166,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &4136654152223078
 Transform:
   m_ObjectHideFlags: 1
@@ -187,7 +187,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1695749674886686}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.08, y: 1.04, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 4583229680203326}
@@ -405,18 +405,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TileTypes:
-  - {fileID: 1411991481385686, guid: d4c13e0a31c558d44a8f388a79193a00, type: 2}
-  - {fileID: 1307014298151480, guid: f7ff2900d66e7bc4fa8b3214486aa170, type: 2}
-  - {fileID: 1513751033591328, guid: acb86a1738de1364cad1d7ac4f60f2ed, type: 2}
-  - {fileID: 1009527748241020, guid: 3b1bf2bdbb915ea458933b1fe51224fc, type: 2}
-  - {fileID: 1500024321721894, guid: 3c21bb32e8e806e4fa9258820dfebadf, type: 2}
-  - {fileID: 1942471274379096, guid: 393103ee2798fb34e9ea8dbd780cc4bc, type: 2}
   - {fileID: 1991328963452212, guid: dc899da57486f4c4fa53c3bb800568d6, type: 2}
+  - {fileID: 1787952542435520, guid: f5738bfb06b8b664f8165c74ec50881a, type: 2}
   - {fileID: 1388657164994780, guid: dcf682d7e73d63e4db2f3cea8bdac239, type: 2}
   - {fileID: 1332557941698796, guid: db872996fbfe6514f8d44df93b2d8380, type: 2}
-  - {fileID: 1994085010386688, guid: 408ff2acb0a41b24dbed2426e39d1530, type: 2}
-  - {fileID: 1114219214756384, guid: 2fb98c264fc22154ca2c06b5921a1717, type: 2}
-  - {fileID: 1787952542435520, guid: f5738bfb06b8b664f8165c74ec50881a, type: 2}
   NavMesh: {fileID: 114521829832108640}
   HexagonHeight: 0.8660246
   NumberTilesX: 4
@@ -462,9 +454,9 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.016666668
+  m_VoxelSize: 0.033333335
   m_BuildHeightMesh: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: b8b2957c366d9fb42abf2a2d1eeafbaa, type: 2}
 --- !u!114 &114538944082256528
 MonoBehaviour:
   m_ObjectHideFlags: 1

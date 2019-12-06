@@ -122,6 +122,7 @@ public abstract class Unit : MonoBehaviour
 
     public void Randevouz(Unit target)
     {
+        Debug.Log(name + "attacked!");
         CheckResult(target, target.ReceiveAttack(this, this.PrepareAttack(target)));
         FinishRound();
     }

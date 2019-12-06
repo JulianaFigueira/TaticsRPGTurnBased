@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.AI;
 
 public interface ICharacterAgent
 {
@@ -28,38 +29,37 @@ public class CharacterAgent : ICharacterAgent
 
     public void CheckRoundState()
     {
-        if (Character.roundStage == Unit.RoundStage.Move && NextPostion != Vector3.up)
+        if (Character.roundStage == Unit.RoundStage.Move)
         {
-            //Agent.SetDestination(NextPostion);
-            NextPostion = Vector3.up;
-        }
+            if (Agent.pathPending)
+                return;
 
-       //if (Agent.remainingDistance > Agent.stoppingDistance)
-       //{
-       //    Character.Move(true, false);
-       //}
-       //else
-        {
-            Agent.isStopped = true;
-            Character.Move(false, false);
-
-            if (Character.roundStage == Unit.RoundStage.Move && Character.unitType == Unit.UnitType.PC)
+            if (Agent.remainingDistance > Agent.stoppingDistance)
             {
-                    Debug.Log("Click on a nearby unit to attack");
-                    Character.roundStage = Unit.RoundStage.ChoseAttack;
-                    Target = null;
+                Character.Move(true, false);
             }
-            else if (Character.roundStage == Unit.RoundStage.Move && Character.unitType == Unit.UnitType.NPC && Target == null)
+            else
             {
-                Debug.Log("Click on a nearby unit to attack");
-                Character.FinishRound();
-            }
-
-            if ((Character.roundStage == Unit.RoundStage.Move || Character.roundStage == Unit.RoundStage.Attack)
-                    && Target != null)
-            {
-                Debug.Log(Character.name + "attacked!");
-                Attack();
+                Agent.isStopped = true;
+                Character.Move(false, false);
+                switch(Character.unitType)
+                {
+                    case Unit.UnitType.NPC:
+                        if (Target == null)
+                        {
+                            Character.FinishRound();
+                        }
+                        else
+                        {
+                            Attack();
+                        }
+                        break;
+                    case Unit.UnitType.PC:
+                        Debug.Log("Click on a nearby unit to attack");
+                        Character.roundStage = Unit.RoundStage.ChoseAttack;
+                        Target = null;
+                        break;
+                }
             }
         }
     }
@@ -69,8 +69,16 @@ public class CharacterAgent : ICharacterAgent
         Character.roundStage = Unit.RoundStage.Move;
         Target = target;
         NextPostion = newPosition;
-        Debug.Log(newPosition.ToString() + " " + target.name );
-        Debug.DrawLine(newPosition, Character.gameObject.transform.position, Color.magenta);
+        Agent.isStopped = false;
+
+            NavMeshHit navHit;
+            NavMesh.SamplePosition(NextPostion, out navHit, Character.Speed, NavMesh.AllAreas); //now get a valid point inside the navmesh from the previous random position
+            NextPostion = navHit.position; // set the new valid destination
+
+        //Agent.SetDestination(NextPostion);
+        Agent.Warp(NextPostion);
+
+        Debug.DrawLine(newPosition, Character.gameObject.transform.position, Color.magenta, 10.0f, false);
     }
 
     public void Attack()
