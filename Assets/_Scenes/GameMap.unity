@@ -219,7 +219,18 @@ Prefab:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 1706410307}
-    m_RemovedComponents: []
+    - target: {fileID: 65308797379116678, guid: 73fbcf2c066bda34d9c7d3722faaa5b9,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114521829832108640, guid: 73fbcf2c066bda34d9c7d3722faaa5b9,
+        type: 2}
+      propertyPath: m_NavMeshData
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 65308797379116678, guid: 73fbcf2c066bda34d9c7d3722faaa5b9, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 73fbcf2c066bda34d9c7d3722faaa5b9, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &1267973782

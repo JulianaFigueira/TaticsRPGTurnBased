@@ -57,6 +57,8 @@ public class CharacterAgent : ICharacterAgent
                     case Unit.UnitType.PC:
                         Debug.Log("Click on a nearby unit to attack");
                         Character.roundStage = Unit.RoundStage.ChoseAttack;
+                        Character.magicCircle.material.SetFloat("_Radius",0.5f);
+                        Character.magicCircle.material.SetInt("_Colori",1);
                         Target = null;
                         break;
                 }
@@ -77,6 +79,8 @@ public class CharacterAgent : ICharacterAgent
 
         //Agent.SetDestination(NextPostion);
         Agent.Warp(NextPostion);
+
+        Character.magicCircle.material.SetFloat("_Radius", 0);
 
         Debug.DrawLine(newPosition, Character.gameObject.transform.position, Color.magenta, 10.0f, false);
     }

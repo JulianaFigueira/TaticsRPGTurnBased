@@ -76,6 +76,7 @@ public abstract class Unit : MonoBehaviour
 
     public ICharacterAgent CharacterAgent;
     protected Action OnRoundFinished;
+    public MeshRenderer magicCircle;
 
     void Start()
     {
@@ -138,6 +139,9 @@ public abstract class Unit : MonoBehaviour
     {
         OnRoundFinished = onRoundFinished;
         roundStage = RoundStage.ChoseMove;
+       
+        magicCircle.material.SetInt("_Colori", 0);
+        magicCircle.material.SetFloat("_Radius", 0.5f);
         Debug.Log("Chose a point in the map for the unit to move");
     }
 

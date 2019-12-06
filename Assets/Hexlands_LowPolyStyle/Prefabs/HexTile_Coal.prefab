@@ -55,7 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4462855419072100}
-  - component: {fileID: 135462213671770010}
+  - component: {fileID: 65289327301094424}
   m_Layer: 8
   m_Name: HexTile_Coal
   m_TagString: Ground
@@ -186,6 +186,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1292641019731376}
   m_Mesh: {fileID: 4300000, guid: 88fa36ad37969f74888c5017f75468b7, type: 3}
+--- !u!65 &65289327301094424
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1307014298151480}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5346811, y: 0.16443908, z: 0.8482568}
+  m_Center: {x: -0.010129929, y: 0.07457644, z: 0.0091046095}
 --- !u!95 &95083222911548292
 Animator:
   serializedVersion: 3
@@ -220,15 +232,3 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
---- !u!135 &135462213671770010
-SphereCollider:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1307014298151480}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.42
-  m_Center: {x: 0, y: 0, z: 0}
